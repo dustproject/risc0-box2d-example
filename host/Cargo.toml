@@ -3,9 +3,8 @@ name = "host"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-risc0-zkvm = "0.13"
 methods = { path = "../methods" }
+risc0-zkvm = { version = "^3.0.4" }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 serde = "1.0"

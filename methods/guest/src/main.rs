@@ -1,27 +1,4 @@
-// Copyright 2023 RISC Zero, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-#![no_main]
-
-pub extern crate externc_libm as libm;
-
-// use std::time::Instant;
-// use std::time::{Duration, SystemTime};
-
 use risc0_zkvm::guest::env;
-
-risc0_zkvm::guest::entry!(main);
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -44,7 +21,7 @@ impl UserDataType for UserDataTypes {
     type Joint = i32;
 }
 
-pub fn hello_world() -> f32 {
+fn hello_world() -> f32 {
     // Define the gravity vector.
     let gravity = B2vec2::new(0.0, -10.0);
 
@@ -124,20 +101,15 @@ pub fn hello_world() -> f32 {
     return position.y;
 }
 
-pub fn main() {
-    // Load the first number from the host
-    let a: u64 = env::read();
-    // Load the second number from the host
-    let b: u64 = env::read();
-    // Verify that neither of them are 1 (i.e. nontrivial factors)
-    if a == 1 || b == 1 {
-        panic!("Trivial factors")
-    }
+fn main() {
+    // read the input
+    let input: u32 = env::read();
+
+    // TODO: do something with the input
 
     let result: f32 = hello_world();
     let result: u32 = result as u32;
 
-    // Compute the product while being careful with integer overflow
-    let product = a.checked_mul(b).expect("Integer overflow");
+    // write public output to the journal
     env::commit(&result);
 }
